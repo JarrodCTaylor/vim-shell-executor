@@ -11,10 +11,10 @@ I find this most useful for SQL queries, however this will work with any program
 ## How it works
 
 The plugin provides two commands.
-`
+```
 ExecuteBuffer
 ExecuteSelction
-`
+```
 These commands allow you to execute either the entire buffer or the visually selected region. The first line
 passed to the plugin is the shell command that will be used to run the remaing lines of code. For example
 to run a mysql query the first line would be the information you would enter to connect to the database.
