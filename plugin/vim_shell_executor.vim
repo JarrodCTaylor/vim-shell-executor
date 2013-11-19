@@ -15,16 +15,14 @@ from vim_shell_executor import *
 def create_new_buffer(contents):
     delete_old_output_if_exists()
     vim.command('aboveleft split executor_output')
-    vim.command("let s:executorOutputBuffer = bufnr('%')")
     vim.command('normal! ggdG')
     vim.command('setlocal filetype=text')
     vim.command('setlocal buftype=nowrite')
     vim.command('call append(0, {0})'.format(contents))
 
 def delete_old_output_if_exists():
-    execute_buffer_exists = int(vim.eval('exists("s:executorOutputBuffer")'))
-    if execute_buffer_exists:
-        vim.command('bdelete! executor_output')
+    if int(vim.eval('buflisted("executor_output")')):
+        vim.command('bdelete executor_output')
 
 def get_visual_selection():
     buf = vim.current.buffer
