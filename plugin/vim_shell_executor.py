@@ -10,7 +10,9 @@ RESULTS_FILE = "/tmp/results"
 def get_program_output_from_buffer_contents(buffer_contents):
     write_buffer_contents_to_file(INPUT_FILE, buffer_contents[1:])
     execute_file_with_specified_shell_program(buffer_contents[0])
-    check_for_errors()
+    if has_errors():
+        new_buf = read_file_lines(ERROR_LOG)
+        return new_buf
     new_buf = read_file_lines(RESULTS_FILE)
     return new_buf
 
@@ -28,9 +30,10 @@ def execute_file_with_specified_shell_program(shell_command):
         pass
 
 
-def check_for_errors():
+def has_errors():
     if os.stat("/tmp/error.log")[stat.ST_SIZE]:
-        raise Exception("Something appears to have gone wrong. Check '/tmp/error.log' or try asking an adult for help.")
+        return True
+    return False
 
 
 def read_file_lines(file_to_read):
