@@ -25,9 +25,23 @@ def write_buffer_contents_to_file(file_name, contents):
 
 def execute_file_with_specified_shell_program(shell_command):
     try:
-        subprocess.check_call("{0} < {1} > {2} 2> {3}".format(shell_command, INPUT_FILE, RESULTS_FILE, ERROR_LOG), shell=True)
+        subprocess.check_call("{0} {1} {2} > {3} 2> {4}".format(
+            shell_command,
+            redirect_or_arg(shell_command),
+            INPUT_FILE,
+            RESULTS_FILE,
+            ERROR_LOG),
+            shell=True
+        )
     except:
         pass
+
+
+def redirect_or_arg(shell_command):
+    redirect_or_agr = "<"
+    if shell_command == "coffee":
+        redirect_or_agr = ""
+    return redirect_or_agr
 
 
 def has_errors():
