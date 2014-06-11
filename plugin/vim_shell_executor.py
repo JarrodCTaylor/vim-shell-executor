@@ -10,10 +10,9 @@ RESULTS_FILE = "/tmp/results"
 def get_program_output_from_buffer_contents(buffer_contents):
     write_buffer_contents_to_file(INPUT_FILE, buffer_contents[1:])
     execute_file_with_specified_shell_program(buffer_contents[0])
-    if has_errors():
-        new_buf = read_file_lines(ERROR_LOG)
-        return new_buf
-    new_buf = read_file_lines(RESULTS_FILE)
+    errors = read_file_lines(ERROR_LOG)
+    std_out = read_file_lines(RESULTS_FILE)
+    new_buf = errors + std_out
     return new_buf
 
 
@@ -42,12 +41,6 @@ def redirect_or_arg(shell_command):
     if shell_command == "coffee":
         redirect_or_agr = ""
     return redirect_or_agr
-
-
-def has_errors():
-    if os.stat("/tmp/error.log")[stat.ST_SIZE]:
-        return True
-    return False
 
 
 def read_file_lines(file_to_read):

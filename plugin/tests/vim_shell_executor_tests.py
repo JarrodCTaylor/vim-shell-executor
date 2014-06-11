@@ -27,6 +27,12 @@ class VimShellExecutorTests(unittest.TestCase):
         returned_buffer = sut.get_program_output_from_buffer_contents(buffer_contents)
         self.assertEqual(expected_error, returned_buffer)
 
+    def test_get_program_output_from_buffer_contents_returns_expected_content_when_error_and_std_out_are_produced(self):
+        buffer_contents = ["python", "print('This is good')", "raise Exception('This is bad')"]
+        expected_error = ['Traceback (most recent call last):', '  File "<stdin>", line 2, in <module>', 'Exception: This is bad', 'This is good']
+        returned_buffer = sut.get_program_output_from_buffer_contents(buffer_contents)
+        self.assertEqual(expected_error, returned_buffer)
+
     def test_write_buffer_contents_to_file_writes_correct_contents_to_desired_file(self):
         buffer_contents = ["var example = function() {", "    console.log('this is an example');", "}"]
         sut.write_buffer_contents_to_file(RESULTS_FILE, buffer_contents)
@@ -37,19 +43,6 @@ class VimShellExecutorTests(unittest.TestCase):
         sut.write_buffer_contents_to_file(INPUT_FILE, ["(def name 'Jarrod')", "(println name)"])
         sut.execute_file_with_specified_shell_program('python')
         self.assertTrue(os.stat(ERROR_LOG)[stat.ST_SIZE] > 0)
-
-    def test_has_errors_returns_true_if_there_is_a_non_empty_error_log(self):
-        sut.write_buffer_contents_to_file(INPUT_FILE, ["(def name 'Jarrod')", "(println name)"])
-        sut.execute_file_with_specified_shell_program('python')
-        self.assertTrue(os.stat(ERROR_LOG)[stat.ST_SIZE] > 0)
-        self.assertEqual(True, sut.has_errors())
-
-    def test_has_errors_returns_false_if_there_is_an_empty_error_log(self):
-        buffer_contents = ["name = 'Jarrod'", "", "def hello():", "    print('Hello {0}'.format(name))", "", "hello()"]
-        sut.write_buffer_contents_to_file(INPUT_FILE, buffer_contents)
-        sut.execute_file_with_specified_shell_program('python')
-        self.assertTrue(os.stat(ERROR_LOG)[stat.ST_SIZE] == 0)
-        self.assertEqual(False, sut.has_errors())
 
     def read_file_to_string(self, file_to_read):
         with open(file_to_read, "r") as f:
