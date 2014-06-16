@@ -44,5 +44,6 @@ def redirect_or_arg(shell_command):
 
 
 def read_file_lines(file_to_read):
-    with open(file_to_read, "r") as f:
-        return [l.rstrip('\n') for l in f.readlines()]
+    if os.path.isfile(file_to_read):
+        with open(file_to_read, "r") as f:
+            return [l.rstrip('\n') for l in f.readlines()]
