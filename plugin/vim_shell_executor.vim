@@ -14,7 +14,10 @@ from vim_shell_executor import *
 
 def create_new_buffer(contents):
     delete_old_output_if_exists()
-    vim.command('aboveleft split executor_output')
+    if int(vim.eval('exists("g:executor_output_win_height")')):
+        vim.command('aboveleft {}split executor_output'.format(vim.eval("g:executor_output_win_height")))
+    else:
+        vim.command('aboveleft split executor_output')
     vim.command('normal! ggdG')
     vim.command('setlocal filetype=text')
     vim.command('setlocal buftype=nowrite')
@@ -22,7 +25,14 @@ def create_new_buffer(contents):
 
 def delete_old_output_if_exists():
     if int(vim.eval('buflisted("executor_output")')):
+        capture_buffer_height_if_visible()
         vim.command('bdelete executor_output')
+
+def capture_buffer_height_if_visible():
+    executor_output_winnr = int(vim.eval('bufwinnr(bufname("executor_output"))'))
+    if executor_output_winnr > 0:
+        executor_output_winheight = vim.eval('winheight("{}")'.format(executor_output_winnr))
+        vim.command("let g:executor_output_win_height = {}".format(executor_output_winheight))
 
 def get_visual_selection():
     buf = vim.current.buffer
