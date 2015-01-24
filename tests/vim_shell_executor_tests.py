@@ -1,7 +1,7 @@
 import os
 import stat
 import unittest
-import vim_shell_executor as sut
+import autoload.vim_shell_executor as sut
 
 INPUT_FILE = "/tmp/input"
 ERROR_LOG = "/tmp/error.log"
