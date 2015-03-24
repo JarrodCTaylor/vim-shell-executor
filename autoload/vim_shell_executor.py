@@ -1,6 +1,5 @@
 import subprocess
 import os
-import stat
 
 INPUT_FILE = "/tmp/input"
 ERROR_LOG = "/tmp/error.log"

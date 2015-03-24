@@ -21,7 +21,8 @@ def create_new_buffer(contents):
     vim.command('normal! ggdG')
     vim.command('setlocal filetype=text')
     vim.command('setlocal buftype=nowrite')
-    vim.command('call append(0, {0})'.format(contents))
+    for index, line in enumerate(contents):
+        vim.current.buffer[index] = line
 
 def delete_old_output_if_exists():
     if int(vim.eval('buflisted("executor_output")')):
