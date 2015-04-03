@@ -25,7 +25,7 @@ def create_new_buffer(contents):
         vim.command('call append(0, {0})'.format(contents))
     except:
         for index, line in enumerate(contents):
-            vim.current.buffer[index] = line
+            vim.current.buffer.append(line)
 
 def delete_old_output_if_exists():
     if int(vim.eval('buflisted("executor_output")')):
