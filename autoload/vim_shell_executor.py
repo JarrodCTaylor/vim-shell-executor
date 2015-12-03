@@ -5,10 +5,15 @@ INPUT_FILE = "/tmp/input"
 ERROR_LOG = "/tmp/error.log"
 RESULTS_FILE = "/tmp/results"
 
+def get_command_from_first_line(line):
+    if line.startswith("#!"):
+        return line[2:]
+    return line
 
 def get_program_output_from_buffer_contents(buffer_contents):
     write_buffer_contents_to_file(INPUT_FILE, buffer_contents[1:])
-    execute_file_with_specified_shell_program(buffer_contents[0])
+    command = get_command_from_first_line(buffer_contents[0])
+    execute_file_with_specified_shell_program(command)
     errors = read_file_lines(ERROR_LOG)
     std_out = read_file_lines(RESULTS_FILE)
     new_buf = errors + std_out
