@@ -1,15 +1,20 @@
 " --------------------------------
 " Add our plugin to the path
 " --------------------------------
-python import sys
-python import vim
-python sys.path.append(vim.eval('expand("<sfile>:h")'))
+ if has("python3")
+     command! -nargs=1 Py py3 <args>
+ else
+     command! -nargs=1 Py py <args>
+ endif
+Py import sys
+Py import vim
+Py sys.path.append(vim.eval('expand("<sfile>:h")'))
 
 " --------------------------------
 "  Function(s)
 " --------------------------------
 function! vim_shell_executor#ExecuteWithShellProgram(selection_or_buffer)
-python << endPython
+Py << endPython
 from vim_shell_executor import *
 
 def create_new_buffer(contents):
